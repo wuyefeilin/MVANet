@@ -36,8 +36,8 @@ generator.cuda()
 generator_params = generator.parameters()
 generator_optimizer = torch.optim.Adam(generator_params, opt.lr_gen)
 
-image_root = './data/DIS5K/DIS-TR/images/'
-gt_root = './data/DIS5K/DIS-TR/masks/'
+image_root = '/data_ssd/datasets/SegRefineDatasets/DIS5K/DIS-TR/image'
+gt_root = '/data_ssd/datasets/SegRefineDatasets/DIS5K/DIS-TR/alpha'
 
 train_loader = get_loader(image_root, gt_root, batchsize=opt.batchsize, trainsize=opt.trainsize)
 total_step = len(train_loader)

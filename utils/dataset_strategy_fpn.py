@@ -94,8 +94,8 @@ def randomPeper(img):
 class DISDataset(data.Dataset):
     def __init__(self, image_root, gt_root, trainsize):
         self.trainsize = trainsize
-        self.images = [image_root + f for f in os.listdir(image_root) if f.endswith('.jpg') or f.endswith('tif')]
-        self.gts = [gt_root + f for f in os.listdir(gt_root) if f.endswith('.jpg')
+        self.images = [os.path.join(image_root, f) for f in os.listdir(image_root) if f.endswith('.jpg') or f.endswith('tif')]
+        self.gts = [os.path.join(gt_root, f) for f in os.listdir(gt_root) if f.endswith('.jpg')
                     or f.endswith('.png') or f.endswith('tif')]
         self.images = sorted(self.images)
         self.gts = sorted(self.gts)
