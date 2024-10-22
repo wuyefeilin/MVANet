@@ -5,13 +5,13 @@ import torch
 from PIL import Image
 from torch.autograd import Variable
 from torchvision import transforms
-from utils.config import diste1,diste2,diste3,diste4,disvd
+from utils.config import disvd
 from utils.misc import check_mkdir
 from model.MVANet import inf_MVANet
 import ttach as tta
 
 torch.cuda.set_device(0)
-ckpt_path = '/home/vanessa/code/HRSOD/MVANet-main/saved_model/MVANet/'
+ckpt_path = '/root/cgw/SegRefine/MVANet/pretrained_models'
 args = {
     'crf_refine': True,
     'save_results': True
@@ -29,17 +29,17 @@ target_transform = transforms.ToTensor()
 to_pil = transforms.ToPILImage()
 
 to_test ={
-    'te1':diste1,
-           'te2':diste2,
-           'te3':diste3,
-           'te4':diste4,
+    # 'te1':diste1,
+    #        'te2':diste2,
+    #        'te3':diste3,
+    #        'te4':diste4,
             'vd':disvd
 }
 
 transforms = tta.Compose(
     [
-        tta.HorizontalFlip(),
-        tta.Scale(scales=[0.75, 1,1.25], interpolation='bilinear', align_corners=False),
+        # tta.HorizontalFlip(),
+        # tta.Scale(scales=[0.75, 1,1.25], interpolation='bilinear', align_corners=False),
     ]
 )
 
@@ -53,13 +53,13 @@ def main(item):
     net.eval()
     with torch.no_grad():
         for name, root in to_test.items():
-            root1 = os.path.join(root, 'images')
+            root1 = os.path.join(root, 'im')
             img_list = [os.path.splitext(f) for f in os.listdir(root1)]
             for idx, img_name in enumerate(img_list):
 
                 print ('predicting for %s: %d / %d' % (name, idx + 1, len(img_list)))
-                rgb_png_path = os.path.join(root, 'images', img_name[0] + '.png')
-                rgb_jpg_path = os.path.join(root, 'images', img_name[0] + '.jpg')
+                rgb_png_path = os.path.join(root1, img_name[0] + '.png')
+                rgb_jpg_path = os.path.join(root1, img_name[0] + '.jpg')
                 if os.path.exists(rgb_png_path):
                     img = Image.open(rgb_png_path).convert('RGB')
                 else:
@@ -69,6 +69,7 @@ def main(item):
                 img_var = Variable(img_transform(img_resize).unsqueeze(0), volatile=True).cuda()
                 mask = []
                 for transformer in transforms:  
+                    # print(transformer)
                     rgb_trans = transformer.augment_image(img_var)
                     model_output = net(rgb_trans)
                     deaug_mask = transformer.deaugment_mask(model_output)

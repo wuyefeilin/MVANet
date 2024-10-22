@@ -2,19 +2,19 @@ import numpy as np
 import os
 from utils.test_data import test_dataset
 from utils.saliency_metric import cal_mae,cal_fm,cal_sm,cal_em,cal_wfm, cal_dice, cal_iou,cal_ber,cal_acc
-from utils.config import diste1,diste2,diste3,diste4,disvd
+from utils.config import disvd
 from tqdm import tqdm
 
 test_datasets = {
-    'te1':diste1,
-          'te2':diste2,
-           'te3':diste3,
-          'te4':diste4,
+    # 'te1':diste1,
+    #       'te2':diste2,
+    #        'te3':diste3,
+    #       'te4':diste4,
         'vd':disvd
                 }
 
 
-dir = '/home/vanessa/code/HRSOD/MVANet-main/saved_model/MVANet'
+dir = '/root/cgw/SegRefine/MVANet/pretrained_models'
 files = os.listdir(dir)
 files.sort()
 for items in files:
@@ -26,7 +26,7 @@ for items in files:
         print(name)
         sal_root = os.path.join(dir, items, name)
         print(sal_root)
-        gt_root = root + 'masks'
+        gt_root = root + 'gt'
         print(gt_root)
         if os.path.exists(sal_root):
             test_loader = test_dataset(sal_root, gt_root)

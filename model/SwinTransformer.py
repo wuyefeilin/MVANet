@@ -10,9 +10,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as checkpoint
 import numpy as np
-from mmdet.utils import get_root_logger
+# from mmdet.utils import get_root_logger
+import logging
 from timm.models import load_checkpoint
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
+
+def get_root_logger(name, log_file=None, log_level=logging.INFO, file_mode='w'):
+    logger = logging.getLogger(name)
+    return logger   
 
 class Mlp(nn.Module):
     """ Multilayer perceptron."""
@@ -640,7 +645,7 @@ def SwinS(pretrained=True):
 def SwinB(pretrained=True):
     model = SwinTransformer(embed_dim=128, depths=[2, 2, 18, 2], num_heads=[4, 8, 16, 32], window_size=12)
     if pretrained is True:
-        model.load_state_dict(torch.load('./swin_base_patch4_window12_384_22kto1k.pth', map_location='cpu')['model'], strict=False)
+        model.load_state_dict(torch.load('./pretrained_models/swin_base_patch4_window12_384_22kto1k.pth', map_location='cpu')['model'], strict=False)
         
     return model
 
