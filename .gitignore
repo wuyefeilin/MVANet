@@ -1,0 +1,14 @@
+data/
+weights/
+log/
+pretrained_models/*.pth
+output/
+runs/
+pretrained_models/
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+.DS_Store
+.vscode
